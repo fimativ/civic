@@ -1,2 +1,7 @@
 streamlit
+numpy
+bokeh.plotting
+bokeh.models
+streamlit_bokeh
+math
 pandas
