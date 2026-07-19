@@ -9,9 +9,13 @@ from math import comb as C
 # 1. CONFIGURACIÓN Y CONSTANTES
 # =============================================================================
 
-st.set_page_config(layout="wide", page_title="C1VIC D4TA, Orígenes de la probabilidad")
+st.set_page_config(
+    layout="wide",
+    page_title="C1VIC D4TA · Orígenes de la probabilidad",
+    initial_sidebar_state="collapsed",
+)
 
-# Colores
+# Colores de marca
 UBU_RED        = "#9b2743"
 UBU_YELLOW     = "#F5C400"
 UBU_DARK       = "#1a1a1a"
@@ -22,28 +26,31 @@ GREEN_LINE     = "#2e7d32"
 LIGHT_VARS = """
     --app-bg: #fbfbfb;
     --app-fg: #141414;
-    --panel-left-bg: #fffde7;
+    --panel-left-bg: #fffdef;
     --panel-right-bg: #f0eff4;
     --box-bg: #ffffff;
     --box-fg: #1a1a1a;
     --spoiler-bg: #e8eeff;
-    --spoiler-fg: #4169E1;
+    --spoiler-fg: #35509e;
     --metric-border: #d0d0d0;
     --muted-fg: #666666;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
 """
 
 DARK_VARS = """
-    --app-bg: #000000;
-    --app-fg: #ffffff;
-    --panel-left-bg: #121212;
-    --panel-right-bg: #0e0e14;
-    --box-bg: #2e2e2e;
-    --box-fg: #ffffff;
+    --app-bg: #0d0d0f;
+    --app-fg: #f2f2f2;
+    --panel-left-bg: #17160f;
+    --panel-right-bg: #0f0f16;
+    --box-bg: #1e1e24;
+    --box-fg: #f2f2f2;
     --spoiler-bg: #1d2440;
     --spoiler-fg: #9db4ff;
-    --metric-border: #666666;
-    --muted-fg: #bbbbbb;
+    --metric-border: #4a4a52;
+    --muted-fg: #adadad;
+    --shadow: 0 1px 3px rgba(0,0,0,0.45);
 """
+
 
 def detect_dark_theme():
     """True/False si Streamlit expone el tema, None si no se puede saber."""
@@ -51,6 +58,7 @@ def detect_dark_theme():
         return st.context.theme.type == "dark"
     except Exception:
         return None
+
 
 def build_css():
     dark = detect_dark_theme()
@@ -77,115 +85,151 @@ def build_css():
     font-family: 'Open Sans', Arial, sans-serif;
 }}
 [data-testid="stSidebar"] {{ display: none; }}
-.block-container {{ padding: 1rem 3rem !important; max-width: 100% !important; }}
+[data-testid="stHeader"] {{ background: transparent; }}
+.block-container {{
+    padding: clamp(0.5rem, 2vw, 1.25rem) clamp(0.6rem, 3vw, 3rem) !important;
+    max-width: 1600px !important;
+}}
 
+/* ---- Barra de título ---- */
 .top-bar-title {{
-    font-size: 34px; font-weight: 700; color: {UBU_RED};
-    background: var(--box-bg); padding: 20px 40px; border-radius: 12px;
-    display: flex; align-items: center; justify-content: flex-start;
-    height: 100%; width: 100%; line-height: 1.2;
+    font-size: clamp(20px, 3.4vw, 34px); font-weight: 700; color: {UBU_RED};
+    background: var(--box-bg); padding: clamp(12px, 2vw, 22px) clamp(16px, 3vw, 40px);
+    border-radius: 12px; box-shadow: var(--shadow);
+    display: flex; align-items: center; line-height: 1.2;
 }}
 
-div[data-testid="column"]:has(.bg-left) {{
-    background: var(--panel-left-bg);
-    padding: 40px; border-radius: 16px; min-height: calc(100vh - 150px);
+/* ---- Paneles izquierdo (lectura) y derecho (interacción) ---- */
+div[data-testid="column"]:has(.bg-left),
+div[data-testid="column"]:has(.bg-right) {{
+    padding: clamp(16px, 3vw, 40px); border-radius: 16px;
+    min-height: calc(100vh - 150px);
 }}
+div[data-testid="column"]:has(.bg-left)  {{ background: var(--panel-left-bg); }}
 div[data-testid="column"]:has(.bg-right) {{
     background: var(--panel-right-bg);
-    padding: 40px; border-radius: 16px; min-height: calc(100vh - 150px);
     display: flex; flex-direction: column; align-items: center;
 }}
 
+/* ---- Cajas de texto ---- */
 .statement-box {{
-    border: 4px solid {UBU_RED}; border-radius: 12px;
-    padding: 30px 40px; background: var(--box-bg);
-    font-style: italic; text-align: justify;
-    color: var(--box-fg); font-size: 25px; line-height: 1.5; margin-bottom: 30px;
+    border: 3px solid {UBU_RED}; border-radius: 12px;
+    padding: clamp(16px, 2.5vw, 32px); background: var(--box-bg);
+    font-style: italic; text-align: justify; box-shadow: var(--shadow);
+    color: var(--box-fg); font-size: clamp(16px, 2vw, 24px);
+    line-height: 1.5; margin-bottom: clamp(16px, 2.5vw, 30px);
 }}
 .content-box {{
     border: 2px solid {UBU_RED}; border-radius: 12px;
-    padding: 20px 25px; background: var(--box-bg);
-    font-style: normal; text-align: justify;
-    color: var(--box-fg); font-size: 25px; line-height: 1.6; margin-bottom: 20px;
+    padding: clamp(14px, 2vw, 24px); background: var(--box-bg);
+    text-align: justify; box-shadow: var(--shadow);
+    color: var(--box-fg); font-size: clamp(15px, 1.9vw, 22px);
+    line-height: 1.6; margin-bottom: clamp(12px, 1.6vw, 20px);
 }}
 .section-title {{
-    font-size: 28px; font-weight: 700; color: var(--app-fg);
+    font-size: clamp(18px, 2.3vw, 27px); font-weight: 700; color: var(--app-fg);
     margin: 10px 0 15px 0; border-bottom: 3px solid {UBU_YELLOW};
     padding-bottom: 10px;
 }}
-.spacer {{ height: 35px; }}
+.spacer {{ height: clamp(16px, 3vw, 35px); }}
 
-/* ---- Spoiler: borroso en azul hasta que se pulsa ---- */
+/* ---- Spoiler: borroso hasta que se pulsa ---- */
 .spoiler-toggle {{ display: none; }}
-.spoiler-lbl {{ cursor: pointer; display: block; margin-top: 20px; margin-bottom: 25px; }}
-.spoiler-box {{
-    color: var(--spoiler-fg); font-weight: 400; font-size: 25px; line-height: 1.5;
-    background: var(--spoiler-bg); border-left: 10px solid var(--spoiler-fg);
-    padding: 25px 35px; border-radius: 0 12px 12px 0;
-    filter: blur(15px); transition: filter 0.3s;
+.spoiler-lbl {{
+    cursor: pointer; display: block; position: relative;
+    margin: 18px 0 22px 0;
 }}
-.spoiler-toggle:checked + .spoiler-box {{ filter: none; }}
+.spoiler-hint {{
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2; pointer-events: none;
+    font-size: clamp(14px, 1.7vw, 20px); font-weight: 700;
+    color: var(--spoiler-fg); letter-spacing: 0.3px;
+    background: var(--box-bg); padding: 8px 18px; border-radius: 999px;
+    box-shadow: var(--shadow); white-space: nowrap;
+}}
+.spoiler-box {{
+    color: var(--spoiler-fg); font-weight: 400;
+    font-size: clamp(15px, 1.9vw, 22px); line-height: 1.5;
+    background: var(--spoiler-bg); border-left: 8px solid var(--spoiler-fg);
+    padding: clamp(16px, 2vw, 28px); border-radius: 0 12px 12px 0;
+    filter: blur(9px); transition: filter 0.25s ease;
+}}
+.spoiler-toggle:checked ~ .spoiler-box  {{ filter: none; }}
+.spoiler-toggle:checked ~ .spoiler-hint {{ opacity: 0; }}
 .formula-box {{
     border: 3px solid var(--spoiler-fg); border-radius: 12px;
     background: var(--box-bg); padding: 15px 20px; margin: 15px 0;
     text-align: center; font-family: 'STIX Two Math', 'Cambria Math', serif;
-    font-size: 27px; color: var(--spoiler-fg);
+    font-size: clamp(17px, 2.2vw, 26px); color: var(--spoiler-fg);
 }}
 
-button p {{ font-size: 25px !important; }}
-div[data-testid="column"] button {{ padding-top: 15px !important; padding-bottom: 15px !important; }}
+/* ---- Botones (navegación + acordeón) ---- */
+button p {{ font-size: clamp(14px, 1.7vw, 21px) !important; line-height: 1.2 !important; }}
+div[data-testid="column"] button {{
+    padding-top: 14px !important; padding-bottom: 14px !important;
+    white-space: normal !important; height: 100%;
+}}
 
-/* ---- Sliders: números min/max ARRIBA y mucho más grandes ---- */
+/* ---- Sliders: números min/max ARRIBA y grandes ---- */
 div[data-testid="stSlider"] > div {{
-    display: flex !important;
-    flex-direction: column-reverse !important;
+    display: flex !important; flex-direction: column-reverse !important;
 }}
-[data-testid="stTickBarMin"], [data-testid="stTickBarMax"] {{
-    display: block !important;
-    font-size: 34px !important; font-weight: 700 !important;
-    color: var(--app-fg) !important;
-}}
+[data-testid="stTickBarMin"], [data-testid="stTickBarMax"],
 [data-testid="stThumbValue"] {{
     display: block !important;
-    font-size: 34px !important; font-weight: 700 !important;
+    font-size: clamp(18px, 2.5vw, 30px) !important; font-weight: 700 !important;
     color: var(--app-fg) !important;
 }}
-.stSlider [data-baseweb="slider"] {{ padding-top: 55px; padding-bottom: 5px; }}
+.stSlider [data-baseweb="slider"] {{ padding-top: 50px; padding-bottom: 5px; }}
 .stSlider {{ margin-bottom: 5px; }}
 
 /* ---- Number inputs ---- */
 [data-testid="stNumberInput"] input {{
-    font-size: 25px !important; font-weight: 600 !important;
+    font-size: clamp(15px, 1.9vw, 22px) !important; font-weight: 600 !important;
 }}
 [data-testid="stNumberInput"] label p, .stNumberInput label p {{
-    font-size: 25px !important; color: var(--app-fg) !important;
+    font-size: clamp(14px, 1.8vw, 22px) !important; color: var(--app-fg) !important;
 }}
 
-/* ---- Cajas de resultados en una sola línea ---- */
+/* ---- Cajas de resultados ---- */
 .metric-box {{
-    font-size: 24px; color: var(--app-fg); text-align: center;
+    font-size: clamp(15px, 1.9vw, 22px); color: var(--app-fg); text-align: center;
     border: 3px solid var(--metric-border); border-radius: 12px;
     padding: 12px 15px; background: var(--box-bg); width: 100%;
-    margin-bottom: 15px; white-space: nowrap; overflow: hidden;
+    margin-bottom: 15px; box-shadow: var(--shadow);
 }}
-.metric-third {{ font-size: 19px; padding: 12px 8px; }}
+.metric-third {{ font-size: clamp(13px, 1.5vw, 18px); padding: 12px 8px; }}
 .metric-a {{ border-color: {BLUE_LINE};  color: {BLUE_LINE};  font-weight: 700; }}
 .metric-b {{ border-color: {GREEN_LINE}; color: {GREEN_LINE}; font-weight: 700; }}
 
-.result-jugador {{ background: {UBU_YELLOW} !important; color: {UBU_DARK} !important;  border-color: {UBU_YELLOW} !important; }}
-.result-banca   {{ background: #d32f2f !important;     color: #ffffff !important;     border-color: #d32f2f !important; }}
-.result-justo   {{ background: {GREEN_LINE} !important;color: #ffffff !important;     border-color: {GREEN_LINE} !important; }}
+.result-jugador {{ background: {UBU_YELLOW} !important; color: {UBU_DARK} !important; border-color: {UBU_YELLOW} !important; }}
+.result-banca   {{ background: #d32f2f !important;      color: #ffffff !important;   border-color: #d32f2f !important; }}
+.result-justo   {{ background: {GREEN_LINE} !important; color: #ffffff !important;   border-color: {GREEN_LINE} !important; }}
 
 .footer-bar {{
     background: var(--box-bg); border: 3px solid var(--metric-border);
-    border-radius: 12px; padding: 20px 25px; text-align: center;
-    font-style: italic; font-size: 25px; color: var(--box-fg);
-    margin-top: 20px; width: 100%;
+    border-radius: 12px; padding: clamp(14px, 2vw, 22px); text-align: center;
+    font-style: italic; font-size: clamp(15px, 1.9vw, 22px); color: var(--box-fg);
+    margin-top: 20px; width: 100%; box-shadow: var(--shadow);
 }}
 .footer-license {{
     background: var(--box-bg); border-radius: 12px;
-    padding: 25px; text-align: center;
-    font-size: 22px; color: var(--muted-fg); margin-top: 30px;
+    padding: 20px; text-align: center;
+    font-size: clamp(13px, 1.6vw, 20px); color: var(--muted-fg); margin-top: 28px;
+}}
+
+/* ============ MÓVIL: reflow de una sola columna ============ */
+@media (max-width: 640px) {{
+    div[data-testid="column"]:has(.bg-left),
+    div[data-testid="column"]:has(.bg-right) {{
+        min-height: auto !important;
+        margin-bottom: 14px;
+    }}
+    .statement-box, .content-box {{ text-align: left; }}
+    .metric-third {{ white-space: normal; }}
+    /* Los controles/acordeones de navegación ocupan todo el ancho */
+    [data-testid="stHorizontalBlock"]:has(button) {{ flex-wrap: wrap; }}
 }}
 </style>
 """
@@ -212,10 +256,11 @@ def accordion_step(step_id: str, title: str) -> bool:
         st.rerun()
     return is_open
 
-def spoiler(html_content: str):
+def spoiler(html_content: str, hint: str = "🔒 Pulsa para revelar la solución"):
     st.markdown(
         f"""<label class='spoiler-lbl'>
             <input type='checkbox' class='spoiler-toggle'>
+            <span class='spoiler-hint'>{hint}</span>
             <div class='spoiler-box'>{html_content}</div>
         </label>""",
         unsafe_allow_html=True,
@@ -234,37 +279,64 @@ def prob_a_gana(need_a: int, need_b: int, p: float) -> float:
     return sum(C(max_rounds, k) * (p ** k) * ((1 - p) ** (max_rounds - k))
                for k in range(need_a, max_rounds + 1))
 
-def style_axes(p, label_size="30px", tick_size="20px"):
-    p.xaxis.axis_label_text_font_size = label_size
-    p.yaxis.axis_label_text_font_size = label_size
-    p.xaxis.major_label_text_font_size = tick_size
-    p.yaxis.major_label_text_font_size = tick_size
-    p.background_fill_color = "#ffffff"
-    p.border_fill_color = "#ffffff"
+# ---- Tematización de las gráficas (claro / oscuro / desconocido) ----
+
+def chart_theme(dark):
+    if dark is True:
+        return dict(fg="#e6e6e6", grid="#3a3a42", axis="#8a8a92",
+                    region_good="#1f3524", region_bad="#3a2020", region_alpha=0.6)
+    if dark is False:
+        return dict(fg="#2a2a2a", grid="#e2e2e2", axis="#9a9a9a",
+                    region_good="#EAF3DE", region_bad="#FCEBEB", region_alpha=0.5)
+    # Tema desconocido: gris neutro legible sobre fondo claro u oscuro
+    return dict(fg="#8a8a8a", grid="#8a8a8a", axis="#8a8a8a",
+                region_good="#7aa06a", region_bad="#c08080", region_alpha=0.28)
+
+def style_axes(p, th, label_size="18px", tick_size="14px"):
+    # Fondo transparente para integrarse con el panel en claro y oscuro
+    p.background_fill_alpha = 0
+    p.border_fill_alpha = 0
+    p.outline_line_color = None
+    for axis in (p.xaxis, p.yaxis):
+        axis.axis_label_text_font_size = label_size
+        axis.major_label_text_font_size = tick_size
+        axis.axis_label_text_color = th["fg"]
+        axis.major_label_text_color = th["fg"]
+        axis.axis_line_color = th["axis"]
+        axis.major_tick_line_color = th["axis"]
+        axis.minor_tick_line_color = None
+    p.xgrid.grid_line_color = th["grid"]
+    p.ygrid.grid_line_color = th["grid"]
+    p.xgrid.grid_line_alpha = 0.5
+    p.ygrid.grid_line_alpha = 0.5
     return p
 
-def create_probability_curve(a_vals, pa_vals):
-    p = figure(height=215, x_axis_label="p (prob. de que A gane cada ronda)",
+def create_probability_curve(a_vals, pa_vals, th):
+    p = figure(height=230, sizing_mode="stretch_width",
+               x_axis_label="p (prob. de que A gane cada ronda)",
                y_axis_label="Prob. de ganar",
                toolbar_location=None, x_range=(0, 1), y_range=(0, 1))
     p.line(a_vals, pa_vals, line_width=5, color=BLUE_LINE)
     p.line(a_vals, 1 - pa_vals, line_width=5, color=GREEN_LINE, line_dash="dashed")
-    sp = Span(location=0.5, dimension="height", line_color="gray", line_dash="dotted", line_width=1)
+    sp = Span(location=0.5, dimension="height", line_color=th["axis"],
+              line_dash="dotted", line_width=1)
     p.add_layout(sp)
-    return style_axes(p)
+    return style_axes(p, th)
 
-def create_ev_chart(a_vals, ev_vals):
-    p = figure(height=215, x_axis_label="Probabilidad", y_axis_label="Esperanza",
-               toolbar_location=None, x_range=(0, 0.5),
-               y_range=(0, max(ev_vals.max(), 2)))
-    p.quad(top=max(ev_vals.max(), 2), bottom=1, left=0, right=0.5,
-           fill_color="#EAF3DE", fill_alpha=0.5, line_color=None)
-    p.quad(top=1, bottom=0, left=0, right=0.5, fill_color="#FCEBEB",
-           fill_alpha=0.5, line_color=None)
+def create_ev_chart(a_vals, ev_vals, th):
+    top = max(ev_vals.max(), 2)
+    p = figure(height=230, sizing_mode="stretch_width",
+               x_axis_label="Probabilidad", y_axis_label="Esperanza",
+               toolbar_location=None, x_range=(0, 0.5), y_range=(0, top))
+    p.quad(top=top, bottom=1, left=0, right=0.5,
+           fill_color=th["region_good"], fill_alpha=th["region_alpha"], line_color=None)
+    p.quad(top=1, bottom=0, left=0, right=0.5,
+           fill_color=th["region_bad"], fill_alpha=th["region_alpha"], line_color=None)
     p.line(a_vals, ev_vals, line_width=5, color=BLUE_LINE)
-    sp = Span(location=1, dimension="width", line_color="gray", line_dash="dashed", line_width=1)
+    sp = Span(location=1, dimension="width", line_color=th["axis"],
+              line_dash="dashed", line_width=1)
     p.add_layout(sp)
-    return style_axes(p)
+    return style_axes(p, th)
 
 def create_survival_data(mortality_rate):
     franjas = ["0-10", "10-20", "20-30", "30-40", "40-50", "50-60", "60-70", "70-80", "80+"]
@@ -279,14 +351,15 @@ def create_survival_data(mortality_rate):
     ev = sum(edades_mid[k] * p_muerte[k] for k in range(n_franjas)) + 85 * superv[-1]
     return edades_plot, superv, ev
 
-def create_survival_chart(edades_plot, superv):
-    p = figure(height=215, x_axis_label="Edad (años)",
-               y_axis_label="Supervivencia S(t)",
+def create_survival_chart(edades_plot, superv, th):
+    p = figure(height=230, sizing_mode="stretch_width",
+               x_axis_label="Edad (años)", y_axis_label="Supervivencia S(t)",
                toolbar_location=None, x_range=(0, 90), y_range=(0, 1.05))
-    p.line(edades_plot, superv, line_width=5, color=BLUE_LINE)
-    p.circle(edades_plot, superv, size=12, color=BLUE_LINE, line_color="white", line_width=2)
     p.varea(x=edades_plot, y1=0, y2=superv, color=BLUE_LINE, alpha=0.10)
-    return style_axes(p)
+    p.line(edades_plot, superv, line_width=5, color=BLUE_LINE)
+    p.scatter(edades_plot, superv, size=12, marker="circle",
+              color=BLUE_LINE, line_color="white", line_width=2)
+    return style_axes(p, th)
 
 # =============================================================================
 # 4. PÁGINAS DE CONTENIDO
@@ -347,7 +420,7 @@ def render_intro():
             unsafe_allow_html=True
         )
 
-def render_problem_1():
+def render_problem_1(dark):
     col_left, col_right = st.columns([1, 1], gap="large")
 
     with col_left:
@@ -443,12 +516,13 @@ def render_problem_1():
             st.markdown(f"<div class='metric-box metric-b'>&#8473;(B gana) = {p_b:.4f}</div>",
                         unsafe_allow_html=True)
 
+        th = chart_theme(dark)
         a_vals = np.linspace(0, 1, 200)
         pa_vals = np.array([prob_a_gana(need_a, need_b, av) for av in a_vals])
 
-        p = create_probability_curve(a_vals, pa_vals)
-        p.circle([p_cara], [p_a], size=16, color=BLUE_LINE, line_color="white", line_width=2)
-        p.circle([p_cara], [p_b], size=16, color=GREEN_LINE, line_color="white", line_width=2)
+        p = create_probability_curve(a_vals, pa_vals, th)
+        p.scatter([p_cara], [p_a], size=16, marker="circle", color=BLUE_LINE, line_color="white", line_width=2)
+        p.scatter([p_cara], [p_b], size=16, marker="circle", color=GREEN_LINE, line_color="white", line_width=2)
         streamlit_bokeh(p, use_container_width=True)
 
         st.markdown(
@@ -458,7 +532,7 @@ def render_problem_1():
             unsafe_allow_html=True
         )
 
-def render_problem_2():
+def render_problem_2(dark):
     col_left, col_right = st.columns([1, 1], gap="large")
 
     with col_left:
@@ -555,12 +629,13 @@ def render_problem_2():
             st.markdown(f"<div class='metric-box {clase}'>Resultado: {resultado}</div>",
                         unsafe_allow_html=True)
 
+        th = chart_theme(dark)
         a_vals = np.linspace(0.001, 0.5, 300)
         ev_vals = a_vals * premio
 
-        p1 = create_ev_chart(a_vals, ev_vals)
-        p1.circle([a], [min(ev, ev_vals.max())], size=18, color=BLUE_LINE,
-                  line_color="white", line_width=2)
+        p1 = create_ev_chart(a_vals, ev_vals, th)
+        p1.scatter([a], [min(ev, ev_vals.max())], size=18, marker="circle",
+                   color=BLUE_LINE, line_color="white", line_width=2)
         streamlit_bokeh(p1, use_container_width=True)
 
         st.markdown(
@@ -569,7 +644,7 @@ def render_problem_2():
             unsafe_allow_html=True
         )
 
-def render_problem_3():
+def render_problem_3(dark):
     col_left, col_right = st.columns([1, 1], gap="large")
 
     with col_left:
@@ -661,7 +736,8 @@ def render_problem_3():
             st.markdown(f"<div class='metric-box metric-third'><b>Superv. a los 70:</b> {superv[7]*100:.1f}%</div>",
                         unsafe_allow_html=True)
 
-        streamlit_bokeh(create_survival_chart(edades_plot, superv), use_container_width=True)
+        th = chart_theme(dark)
+        streamlit_bokeh(create_survival_chart(edades_plot, superv, th), use_container_width=True)
 
         st.markdown(
             f"<div class='footer-bar'>Con tasa de mortalidad M={M:.2f} por franja: "
@@ -676,21 +752,32 @@ def render_problem_3():
 def main():
     init_session_state()
     st.markdown(build_css(), unsafe_allow_html=True)
+    dark = detect_dark_theme()
 
-    st.markdown("<div class='top-bar-title'>C1VIC D4TA, Orígenes de la probabilidad</div>",
+    st.markdown("<div class='top-bar-title'>C1VIC D4TA · Orígenes de la probabilidad</div>",
                 unsafe_allow_html=True)
-    st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-bottom: 16px;'></div>", unsafe_allow_html=True)
 
-    nav_col1, nav_col2, nav_col3, nav_col4 = st.columns(4)
+    current_page = st.session_state["page"]
+    nav = [
+        ("INTRO", "Introducción", None),
+        ("P1", "(I) Otra apuesta de Pascal", "P1_1"),
+        ("P2", "(II) Una lotería justa", "P2_1"),
+        ("P3", "(III) Con estadística y a lo loco", "P3_1"),
+    ]
+    nav_cols = st.columns(4)
+    for col, (page_id, label, first_step) in zip(nav_cols, nav):
+        is_active = current_page == page_id
+        if col.button(label, use_container_width=True,
+                      type="primary" if is_active else "secondary",
+                      key=f"nav_{page_id}"):
+            update = {"page": page_id}
+            if first_step:
+                update["open_step"] = first_step
+            st.session_state.update(update)
+            st.rerun()
 
-    if nav_col1.button("Introducción", use_container_width=True):
-        st.session_state.update({"page": "INTRO"}); st.rerun()
-    if nav_col2.button("(I) Otra apuesta de Pascal", use_container_width=True):
-        st.session_state.update({"page": "P1", "open_step": "P1_1"}); st.rerun()
-    if nav_col3.button("(II) Una lotería justa", use_container_width=True):
-        st.session_state.update({"page": "P2", "open_step": "P2_1"}); st.rerun()
-    if nav_col4.button("(III) Con estadística y a lo loco", use_container_width=True):
-        st.session_state.update({"page": "P3", "open_step": "P3_1"}); st.rerun()
+    st.markdown("<div style='margin-bottom: 12px;'></div>", unsafe_allow_html=True)
 
     paginas = {
         "INTRO": render_intro,
@@ -698,10 +785,11 @@ def main():
         "P2": render_problem_2,
         "P3": render_problem_3,
     }
-
-    current_page = st.session_state["page"]
-    if current_page in paginas:
-        paginas[current_page]()
+    render = paginas.get(current_page, render_intro)
+    if current_page == "INTRO":
+        render()
+    else:
+        render(dark)
 
     st.markdown(
         "<div class='footer-license'>MIT License &nbsp;|&nbsp; CC BY-NC 4.0 &nbsp;|&nbsp; "
