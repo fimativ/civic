@@ -2,3 +2,4 @@ streamlit
 numpy
 bokeh
 streamlit-bokeh
+scipy.stats
