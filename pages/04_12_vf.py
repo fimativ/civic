@@ -1,3 +1,5 @@
+#Adriana Ortega 2026 Prácticas Externas UC-C1VIC D4TA
+
 import streamlit as st
 import numpy as np
 from bokeh.plotting import figure
@@ -966,7 +968,11 @@ def main():
     elif st.session_state["page"] == "BOXMULLER":
         render_box_muller()
     
-    st.markdown("<div class='footer-license'>C1VIC D4TA · Universidad de Burgos</div>", unsafe_allow_html=True)
+    st.markdown(
+        "<div class='footer-license'>MIT License &nbsp;|&nbsp; CC BY-NC 4.0 &nbsp;|&nbsp; "
+        "[AOD, OVG, SPP] 2026</div>",
+        unsafe_allow_html=True
+    )
 
 if __name__ == "__main__":
     main()

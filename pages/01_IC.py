@@ -1,3 +1,5 @@
+#Adriana Ortega 2026 Prácticas Externas UC-C1VIC D4TA
+
 import streamlit as st
 import numpy as np
 from scipy.stats import t as t_dist, norm
@@ -10,7 +12,7 @@ from streamlit_bokeh import streamlit_bokeh
 # 1. CONFIGURACIÓN Y CONSTANTES
 # =============================================================================
 
-st.set_page_config(layout="wide", page_title="C1VIC D4TA - Intervalos de Confianza")
+st.set_page_config(layout="wide", page_title="C1VIC D4TA · Intervalos de Confianza")
 
 # Colores UBU y diseño
 UBU_RED        = "#9b2743"
@@ -326,7 +328,7 @@ def draw_combined_chart(intervals, sample_size, ci_level, mu=50, sigma=10):
 def main():
     st.markdown(build_css(), unsafe_allow_html=True)
 
-    st.markdown("<div class='top-bar-title'>C1VIC D4TA: Intervalos de Confianza</div>", unsafe_allow_html=True)
+    st.markdown("<div class='top-bar-title'>C1VIC D4TA · Intervalos de Confianza</div>", unsafe_allow_html=True)
 
     col_left, col_right = st.columns([1, 1], gap="large")
 

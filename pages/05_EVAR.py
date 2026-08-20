@@ -1,3 +1,5 @@
+#Adriana Ortega 2026 Prácticas Externas UC-C1VIC D4TA
+
 import streamlit as st
 import numpy as np
 from bokeh.plotting import figure
@@ -8,7 +10,7 @@ from streamlit_bokeh import streamlit_bokeh
 # 1. CONFIGURACIÓN Y CONSTANTES
 # =============================================================================
 
-st.set_page_config(layout="wide", page_title="Esperanza y Varianza")
+st.set_page_config(layout="wide", page_title="C1VIC D4TA · Esperanza y Varianza")
 
 # Colores
 UBU_RED        = "#9b2743"

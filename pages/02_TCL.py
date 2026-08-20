@@ -1,3 +1,5 @@
+#Adriana Ortega 2026 Prácticas Externas UC-C1VIC D4TA
+
 import streamlit as st
 import numpy as np
 import plotly.graph_objects as go
@@ -7,7 +9,7 @@ from scipy.stats import norm
 # 1. CONFIGURACIÓN Y CONSTANTES
 # =============================================================================
 
-st.set_page_config(layout="wide", page_title="C1VIC D4TA - Teorema del Límite Central")
+st.set_page_config(layout="wide", page_title="C1VIC D4TA · Teorema del Límite Central")
 
 # Colores UBU y diseño unificado
 UBU_RED      = "#9b2743"

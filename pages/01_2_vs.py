@@ -1,3 +1,5 @@
+#Adriana Ortega 2026 Prácticas Externas UC-C1VIC D4TA
+
 import streamlit as st
 from bokeh.plotting import figure
 from streamlit_bokeh import streamlit_bokeh

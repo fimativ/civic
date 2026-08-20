@@ -1,3 +1,5 @@
+#Adriana Ortega 2026 Prácticas Externas UC-C1VIC D4TA
+
 import streamlit as st
 import numpy as np
 from bokeh.plotting import figure
@@ -331,8 +333,8 @@ def main():
         st.markdown(f"""
         <div class='comment-box'>
             <span class='comment-label'>Propiedades del Estimador:</span><br>
-            • <b>Insesgadez:</b> El valor esperado del estimador es exactamente el parámetro real $E[\\hat{{\\pi}}] = \\pi$.<br>
-            • <b>Consistencia:</b> Conforme $n \\to \\infty$, el error del estimador se reduce a cero.<br><br>
+            • <b>Insesgadez:</b> El valor esperado del estimador es exactamente el parámetro real E[π^] = π.<br>
+            • <b>Consistencia:</b> Conforme n → ∞, el error del estimador se reduce a cero.<br><br>
             <b>π Teórico:</b> {math.pi:.6f} &nbsp;|&nbsp; <b>Error absoluto actual:</b> {error_text}
         </div>
         """, unsafe_allow_html=True)
